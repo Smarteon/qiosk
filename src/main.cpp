@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 
     if(qgetenv("XDG_CURRENT_DESKTOP") == "") {
         // Hack to ~fix virtual keyboard viewport on openbox
-        QObject::connect(QGuiApplication::inputMethod(), &QInputMethod::visibleChanged, &handleVisibleChanged);
+        // QObject::connect(QGuiApplication::inputMethod(), &QInputMethod::visibleChanged, &handleVisibleChanged);
     }
 
 
