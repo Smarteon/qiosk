@@ -39,6 +39,7 @@ public:
     QString userAgent;
     QString autologinUsername;
     QString autologinPassword;
+    qreal webScale;
 
 
     void setUrl(QUrl url);
@@ -61,6 +62,7 @@ public:
     void setUserAgent(QString userAgent);
     void setAutologinUsername(QString username);
     void setAutologinPassword(QString password);
+    void setWebScale(qreal webScale);
 
     bool isFullscreen();
     bool isMaximized();
@@ -78,6 +80,7 @@ public:
     QString getProfileName();
     QString getAutologinUsername();
     QString getAutologinPassword();
+    qreal getWebScale();
 
     bool isDisplayScrollBars();
     void setDisplayScrollBars(bool displayScrollBars);

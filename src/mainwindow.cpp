@@ -26,6 +26,14 @@ MainWindow::MainWindow(Configuration *config, QWidget *parent)
         injectAutoLoginJS(this->webView, this->config);
     });
 
+    // Connect the loadFinished signal to set the zoom factor
+    connect(this->webView, &QWebEngineView::loadFinished, this, [this](bool ok) {
+        if (ok) {
+            QTimer::singleShot(0, this, [this]() {
+                this->webView->setZoomFactor(this->config->getWebScale());
+            });
+        }
+    });
 
     QWebEngineProfile *profile = (this->config->getProfileName() == "default" ? QWebEngineProfile::defaultProfile() : new QWebEngineProfile(this->config->getProfileName()));
     // Make sure correct cookie settings are set
@@ -208,9 +216,6 @@ void MainWindow::setWindowMode(QWindow::Visibility windowMode) {
 
 void MainWindow::goHome() {
     this->webView->load(this->initialUrl);
-
-    //Reset zoom on home button press
-    this->webView->setZoomFactor(1.0);
 }
 
 void MainWindow::doReload() {
@@ -240,9 +245,6 @@ void MainWindow::doReset() {
 
     // Reset scroll
     this->webView->scrollTo(0, 0);
-
-    // Reset zoom
-    this->webView->setZoomFactor(1.0);
 
     // Reset cookies
     this->webView->page()->profile()->cookieStore()->deleteAllCookies();

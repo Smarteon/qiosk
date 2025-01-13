@@ -141,6 +141,9 @@ int main(int argc, char *argv[])
     QCommandLineOption autologinPasswordOption(QStringList() << "p" << "autologin-password", QCoreApplication::translate("main", "Loxone password for autologin to use"), QCoreApplication::translate("main", "Autologin password."), "password");
     parser.addOption(autologinPasswordOption);
 
+    // A float option (-s, --web-scale)
+    QCommandLineOption webScaleOption(QStringList() << "s" << "web-scale", QCoreApplication::translate("main", "Web scale factor"), QCoreApplication::translate("main", "scale"), "1.0");
+    parser.addOption(webScaleOption);
 
     // Process the actual command line arguments given by the user
     parser.process(a);
@@ -174,6 +177,7 @@ int main(int argc, char *argv[])
     config->setProfileName(parser.value(profileNameOption));
     config->setAutologinUsername(parser.value(autologinUsernameOption));
     config->setAutologinPassword(parser.value(autologinPasswordOption));
+    config->setWebScale(parser.value(webScaleOption).toFloat());
 
     if (parser.isSet(whiteListOption)) {
         config->setWhiteList(parser.values(whiteListOption));
