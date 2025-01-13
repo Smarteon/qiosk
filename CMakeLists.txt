@@ -18,6 +18,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS WebSockets)
 
 
 set(PROJECT_SOURCES
+    src/autologin.h src/autologin.cpp
     src/barbutton.cpp src/barbutton.h
     src/barwidget.cpp src/barwidget.h
     src/configuration.cpp src/configuration.h

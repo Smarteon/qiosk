@@ -37,6 +37,8 @@ public:
     QString profileName;
     QString acceptLanguage;
     QString userAgent;
+    QString autologinUsername;
+    QString autologinPassword;
 
 
     void setUrl(QUrl url);
@@ -57,6 +59,8 @@ public:
     void setNavbarEnabledButtons(QList<BarWidget::Button> navBarEnabledButtons);
     void setAcceptLanguage(QString acceptLanguage);
     void setUserAgent(QString userAgent);
+    void setAutologinUsername(QString username);
+    void setAutologinPassword(QString password);
 
     bool isFullscreen();
     bool isMaximized();
@@ -72,6 +76,8 @@ public:
     bool isDisplayNavBar();
     bool isUnderlayNavBar();
     QString getProfileName();
+    QString getAutologinUsername();
+    QString getAutologinPassword();
 
     bool isDisplayScrollBars();
     void setDisplayScrollBars(bool displayScrollBars);

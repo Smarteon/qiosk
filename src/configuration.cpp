@@ -19,7 +19,26 @@ Configuration::Configuration(QObject *parent)
     this->displayScrollBars = false;
     this->underlayNavBar = false;
     this->profileName = "default";
+    this->autologinUsername = "user";
+    this->autologinPassword = "password";
     //this->permissions = WebPage::Permission::AllowGeolocation | WebPage::Permission::AllowInvalidCertificate | WebPage::Permission::AllowNotifications | WebPage::Permission::AllowDesktopVideoCapture;
+}
+
+
+void Configuration::setAutologinUsername(QString username) {
+    this->autologinUsername = username;
+}
+
+QString Configuration::getAutologinUsername() {
+    return this->autologinUsername;
+}
+
+QString Configuration::getAutologinPassword() {
+    return this->autologinPassword;
+}
+
+void Configuration::setAutologinPassword(QString password) {
+    this->autologinPassword = password;
 }
 
 

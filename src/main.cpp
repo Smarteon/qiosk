@@ -133,6 +133,15 @@ int main(int argc, char *argv[])
     QCommandLineOption userAgent(QString("user-agent"), QCoreApplication::translate("main", "Set content of User-Agent header, autodetect when not set."),  QCoreApplication::translate("main", "user_agent"));
     parser.addOption(userAgent);
 
+    // A string option (-u, --autologin-user)
+    QCommandLineOption autologinUsernameOption(QStringList() << "u" << "autologin-user", QCoreApplication::translate("main", "Loxone username for autologin to use"), QCoreApplication::translate("main", "Autologin user."), "user");
+    parser.addOption(autologinUsernameOption);
+
+    // A string option (-p, --autologin-password)
+    QCommandLineOption autologinPasswordOption(QStringList() << "p" << "autologin-password", QCoreApplication::translate("main", "Loxone password for autologin to use"), QCoreApplication::translate("main", "Autologin password."), "password");
+    parser.addOption(autologinPasswordOption);
+
+
     // Process the actual command line arguments given by the user
     parser.process(a);
 
@@ -163,6 +172,8 @@ int main(int argc, char *argv[])
     config->setDisplayScrollBars(parser.isSet(displayScrollBarsOption));
     config->setUnderlayNavBar(parser.isSet(underlayNavBarOption));
     config->setProfileName(parser.value(profileNameOption));
+    config->setAutologinUsername(parser.value(autologinUsernameOption));
+    config->setAutologinPassword(parser.value(autologinPasswordOption));
 
     if (parser.isSet(whiteListOption)) {
         config->setWhiteList(parser.values(whiteListOption));

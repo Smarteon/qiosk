@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-
+#include "autologin.h"
 
 
 
@@ -20,6 +20,12 @@ MainWindow::MainWindow(Configuration *config, QWidget *parent)
     this->connectionChecker = new ConnectionChecker(this);
 
     this->webView = new WebView();
+
+    // Connect the loadFinished signal to inject autologin JS
+    connect(this->webView, &QWebEngineView::loadFinished, this, [this]() {
+        injectAutoLoginJS(this->webView, this->config);
+    });
+
 
     QWebEngineProfile *profile = (this->config->getProfileName() == "default" ? QWebEngineProfile::defaultProfile() : new QWebEngineProfile(this->config->getProfileName()));
     // Make sure correct cookie settings are set
