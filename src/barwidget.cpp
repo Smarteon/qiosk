@@ -117,9 +117,9 @@ void BarWidget::plot() {
 void BarWidget::plot(QSize parentSize) {
 
 
-    QString styleBackground = "BarWidget{background-color: rgba(53, 53, 53, .85);";
+    QString styleBackground = "BarWidget{background-color: rgba(53, 53, 53, 1);";
     int minHeight = 50; //px
-    int minWidth = 48 * 4 + 10; //px
+    int minWidth = 24 * 4 + 10; //px
 
     int barWidth = qMax(parentSize.width() * this->widthPercent / 100 , minWidth);
     int barHeight = qMax(parentSize.height() * this->heightPercent / 100, minHeight);
