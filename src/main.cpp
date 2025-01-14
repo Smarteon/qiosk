@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     //qputenv("QT_ASSUME_STDERR_HAS_CONSOLE", "1");
     //qputenv("QTWEBENGINE_REMOTE_DEBUGGING", "9988"); //https://developer.chrome.com/docs/devtools/
     //qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-logging");
-    //qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
+    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
 
     QCoreApplication::setOrganizationName("Salamek");
     QCoreApplication::setApplicationName("qiosk");
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 
     if(qgetenv("XDG_CURRENT_DESKTOP") == "") {
         // Hack to ~fix virtual keyboard viewport on openbox
-        QObject::connect(QGuiApplication::inputMethod(), &QInputMethod::visibleChanged, &handleVisibleChanged);
+        // QObject::connect(QGuiApplication::inputMethod(), &QInputMethod::visibleChanged, &handleVisibleChanged);
     }
 
 
@@ -133,6 +133,18 @@ int main(int argc, char *argv[])
     QCommandLineOption userAgent(QString("user-agent"), QCoreApplication::translate("main", "Set content of User-Agent header, autodetect when not set."),  QCoreApplication::translate("main", "user_agent"));
     parser.addOption(userAgent);
 
+    // A string option (-u, --autologin-user)
+    QCommandLineOption autologinUsernameOption(QStringList() << "u" << "autologin-user", QCoreApplication::translate("main", "Loxone username for autologin to use"), QCoreApplication::translate("main", "Autologin user."), "user");
+    parser.addOption(autologinUsernameOption);
+
+    // A string option (-p, --autologin-password)
+    QCommandLineOption autologinPasswordOption(QStringList() << "p" << "autologin-password", QCoreApplication::translate("main", "Loxone password for autologin to use"), QCoreApplication::translate("main", "Autologin password."), "password");
+    parser.addOption(autologinPasswordOption);
+
+    // A float option (-s, --web-scale)
+    QCommandLineOption webScaleOption(QStringList() << "s" << "web-scale", QCoreApplication::translate("main", "Web scale factor"), QCoreApplication::translate("main", "scale"), "1.0");
+    parser.addOption(webScaleOption);
+
     // Process the actual command line arguments given by the user
     parser.process(a);
 
@@ -163,6 +175,9 @@ int main(int argc, char *argv[])
     config->setDisplayScrollBars(parser.isSet(displayScrollBarsOption));
     config->setUnderlayNavBar(parser.isSet(underlayNavBarOption));
     config->setProfileName(parser.value(profileNameOption));
+    config->setAutologinUsername(parser.value(autologinUsernameOption));
+    config->setAutologinPassword(parser.value(autologinPasswordOption));
+    config->setWebScale(parser.value(webScaleOption).toFloat());
 
     if (parser.isSet(whiteListOption)) {
         config->setWhiteList(parser.values(whiteListOption));

@@ -1,0 +1,42 @@
+name: Release Qiosk
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g. 1.12.0)'
+        required: true
+        type: string
+
+jobs:
+  build-arm:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [arm64, armhf]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo dpkg --add-architecture ${{ matrix.arch }}
+          sudo apt update -qy
+          sudo apt upgrade -qy
+          sudo apt install build-essential cmake crossbuild-essential-${{ matrix.arch }} qt6-webengine-dev:${{ matrix.arch }} qt6-websockets-dev:${{ matrix.arch }} -qy
+
+      - name: Build
+        run: |
+          export CONFIG_SITE=/etc/dpkg-cross/cross-config.${{ matrix.arch }}
+          cmake -DCMAKE_BUILD_TYPE=Release -S . -B .
+          make
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload to S3
+        run: |
+          aws s3 cp ./qiosk s3://${{ secrets.S3_BUCKET }}/apps/qiosk-${{ inputs.version }}-${{ matrix.arch }}

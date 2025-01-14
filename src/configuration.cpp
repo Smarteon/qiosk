@@ -19,9 +19,36 @@ Configuration::Configuration(QObject *parent)
     this->displayScrollBars = false;
     this->underlayNavBar = false;
     this->profileName = "default";
+    this->autologinUsername = "user";
+    this->autologinPassword = "password";
+    this->webScale = 1.0;
     //this->permissions = WebPage::Permission::AllowGeolocation | WebPage::Permission::AllowInvalidCertificate | WebPage::Permission::AllowNotifications | WebPage::Permission::AllowDesktopVideoCapture;
 }
 
+
+void Configuration::setAutologinUsername(QString username) {
+    this->autologinUsername = username;
+}
+
+QString Configuration::getAutologinUsername() {
+    return this->autologinUsername;
+}
+
+QString Configuration::getAutologinPassword() {
+    return this->autologinPassword;
+}
+
+void Configuration::setAutologinPassword(QString password) {
+    this->autologinPassword = password;
+}
+
+void Configuration::setWebScale(qreal webScale) {
+    this->webScale = webScale;
+}
+
+qreal Configuration::getWebScale() {
+    return this->webScale;
+}
 
 void Configuration::setUrl(QUrl url) {
     this->url = url;
