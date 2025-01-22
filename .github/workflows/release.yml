@@ -10,10 +10,10 @@ on:
 
 jobs:
   build-arm:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     strategy:
       matrix:
-        arch: [arm64, armhf]
+        arch: [arm64]
     steps:
       - uses: actions/checkout@v4
 
@@ -21,21 +21,32 @@ jobs:
         run: |
           sudo dpkg --add-architecture ${{ matrix.arch }}
           sudo apt update -qy
-          sudo apt upgrade -qy
-          sudo apt install build-essential cmake crossbuild-essential-${{ matrix.arch }} qt6-webengine-dev:${{ matrix.arch }} qt6-websockets-dev:${{ matrix.arch }} -qy
+          sudo apt install -y build-essential cmake crossbuild-essential-${{ matrix.arch }} \
+            qt6-webengine-dev:${{ matrix.arch }} \
+            qt6-websockets-dev:${{ matrix.arch }} \
+            qt6-base-dev:${{ matrix.arch }} \
+            qt6-base-dev-tools \
+            qt6-declarative-dev:${{ matrix.arch }} \
+            qt6-tools-dev:${{ matrix.arch }} \
+            qt6-tools-dev-tools \
+            qt6-l10n-tools \
+            libqt6webenginewidgets6:${{ matrix.arch }} \
+            libqt6websockets6:${{ matrix.arch }} \
+            libgl1-mesa-dev \
+            libglvnd-dev \
+            libglx-dev
 
       - name: Build
         run: |
-          export CONFIG_SITE=/etc/dpkg-cross/cross-config.${{ matrix.arch }}
           cmake -DCMAKE_BUILD_TYPE=Release -S . -B .
-          make
+          cmake --build .
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Upload to S3
         run: |
